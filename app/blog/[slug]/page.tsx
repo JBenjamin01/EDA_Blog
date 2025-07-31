@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Clock, Calendar, Terminal } from "lucide-react"
+import { useParams } from "next/navigation"
 
 const blogContent = {
   "recursion-basics": {
@@ -615,14 +618,10 @@ function processMarkdown(text: string) {
   return text
 }
 
-interface BlogPostProps {
-  params: {
-    slug: string
-  }
-}
-
-export default function BlogPost({ params }: BlogPostProps) {
-  const post = blogContent[params.slug as keyof typeof blogContent]
+export default function BlogPost() {
+  const params = useParams()
+  const slug = params.slug as string
+  const post = blogContent[slug as keyof typeof blogContent]
 
   if (!post) {
     return (
@@ -790,10 +789,4 @@ export default function BlogPost({ params }: BlogPostProps) {
       </article>
     </div>
   )
-}
-
-export async function generateStaticParams() {
-  return Object.keys(blogContent).map((slug) => ({
-    slug,
-  }))
 }
